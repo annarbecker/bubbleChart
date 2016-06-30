@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scar Bubble Chart</title>
+  <meta charset="utf-8">
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,200italic,600italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <script src="http://phuonghuynh.github.io/js/bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/d3/d3.min.js"></script>
+  <script src="bubbleDiagram/d3-transform.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/cafej/src/extarray.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/cafej/src/misc.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/cafej/src/micro-observer.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/microplugin/src/microplugin.js"></script>
+  <script src="bubbleDiagram/bubble-chart.js"></script>
+  <script src="bubbleDiagram/central-click.js"></script>
+  <script src="bubbleDiagram/lines.js"></script>
+  <script src="bubbleDiagram/index.js"></script>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  <div class="container">
+    <div>
+      <h1>flukebook</h1>
+    </div>
+      <ul class="nav nav-tabs">
+        <li id="cooccurrenceDiagramTab"><a href="#cooccurrenceDiagram">Co-occurrences Chart</a></li>
+        <li id="cooccurrenceTableTab"><a href="#cooccurrenceTable">Co-occurrences Table</a></li>
+        <li id="encounterTableTab"><a href="#encounterTable">Encounters Table</a></li>
+      </ul>
+      <div id="cooccurrenceDiagram" class="col-sm-12 col-xs-6">
+        <div class="bubbleChart">
+          <div id="buttons" class="btn-group" role="group">
+            <button type="button" class="btn btn-sm btn-default" name="button" id="zoomIn"><span class="glyphicon glyphicon-plus"></span></button>
+            <button type="button" class="btn btn-sm btn-default" name="button" id="zoomOut"><span class="glyphicon glyphicon-minus"></span></button>
+            <button type="button" class="btn btn-sm btn-default" name="button" id="reset">Reset Zoom</button>
+            <button type="button" class="btn btn-sm btn-default" name="button" id="refresh">Reset Diagram</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="cooccurrenceTable">
+        <p>Click the table header to sort data according to that column</p>
+
+        <table id="coTable" class="table table-bordered table-sm table-striped">
+            <thead id="coHead"></thead>
+            <tbody id="coBody"></tbody>
+        </table>
+      </div>
+
+      <div id="encounterTable">
+        <p>Click the table header to sort data according to that column</p>
+
+        <table id="encountTable" class="table table-bordered table-sm table-striped hover">
+            <thead id="encountHead"></thead>
+            <tbody id="encountBody"></tbody>
+        </table>
+      </div>
+
+
+  </div>
+
+</body>
+</html>

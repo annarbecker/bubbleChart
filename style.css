@@ -1,0 +1,63 @@
+body {
+  background: #FFFFFF;
+}
+
+a:hover{
+  color: navy;
+  cursor: pointer;
+}
+
+li.active{
+  background-color: #FFFFFF;
+}
+
+.nav-tabs>li>a {
+  background-color: #7997a1;
+  color: white;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-right: 1px solid white;
+  border-left: 1px solid white;
+}
+
+.nav-tabs>li>a:hover {
+  background-color: #8aacb8;
+}
+
+#cooccurrenceDiagram {
+  justify-content: center;
+  display: none;
+}
+
+#encounterTable {
+  display: none;
+}
+
+.bubbleChart {
+  width: auto;
+  height: 350px;
+}
+
+.bubbleChart svg{
+  background: #373F51;
+  border-radius: 5px;
+  width: 100%;
+}
+
+
+.btn-group {
+  position: absolute;
+}
+
+
+th {
+  background-color: #566c73;
+  color: white;
+  border: 1px solid white;
+  text-align: center;
+  width: 400px;
+  padding: 10px;
+  background-image: url("images/upDownArrows.png");
+  background-repeat: no-repeat;
+  background-position: right;
+}
