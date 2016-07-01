@@ -120,7 +120,7 @@ var makeTable = function(items, tableHeadLocation, tableBodyLocation) {
     .on("click", function(d){ return refreshTable(d) ;});
 
     var tr = d3.select(tableBodyLocation).selectAll("tr").data(items);
-    tr.enter().append("tr");
+    tr.enter().append("tr").attr("class", function(d){return d3.values(d)[0];});
 
     var td = tr.selectAll("td").data(function(d){return d3.values(d);});
     td.enter().append("td")
@@ -167,7 +167,7 @@ var makeTable = function(items, tableHeadLocation, tableBodyLocation) {
 };
 
 var items = [];
-var individualID = 5727;
+var individualID = "Cajun";
 var occurrenceObjectArray = [];
 
 var getData = function() {
@@ -190,8 +190,12 @@ var getData = function() {
         }
         occurrenceArray = occurrenceArray.concat(encounterArray);
         var occurrenceID = jsonData[i].encounters[0].occurrenceID;
+        var index = encounterArray.indexOf(individualID.toString());
+        if (~index) {
+            encounterArray[index] = "";
+        }
         var occurrenceObject = new Object();
-        occurrenceObject = {occurrenceID: occurrenceID, occurringWith: encounterArray.join(", ")};
+        occurrenceObject = {occurrenceID: occurrenceID, occurringWith: encounterArray.filter(function(e){return e}).join(", ")};
         occurrenceObjectArray.push(occurrenceObject);
         encounterArray = [];
       }
@@ -206,7 +210,9 @@ var getData = function() {
         whale = {text:prop, count:dataObject[prop], sex: "", haplotype: ""};
         items.push(whale);
       }
-      makeChart(items);
+      if(items.length > 0) {
+        makeChart(items);
+      }
       getEncounterTableData(occurrenceObjectArray);
     });
   };
@@ -254,7 +260,7 @@ var getData = function() {
           date = "Unknown";
         };
         var location = jsonData.encounters[i].verbatimLocality;
-        catalogNumber = jsonData.encounters[i].catalogNumber;
+        var catalogNumber = jsonData.encounters[i].catalogNumber;
         if(jsonData.encounters[i].tissueSamples.length > 0) {
           var tissueSamples = jsonData.encounters[i].tissueSamples[0].type;
         } else {
@@ -264,21 +270,42 @@ var getData = function() {
         var behavior = jsonData.encounters[i].behavior;
         var alternateID = jsonData.encounters[i].alternateid;
         var encounter = new Object();
-        encounter = {date: date, location: location, dataTypes: tissueSamples, alternateID: alternateID, sex: sex, occurringWith: occurringWith, behavior: behavior, catalogNumber: catalogNumber};
+        encounter = {catalogNumber: catalogNumber, date: date, location: location, dataTypes: tissueSamples, alternateID: alternateID, sex: sex, occurringWith: occurringWith, behavior: behavior};
         encounterData.push(encounter);
       }
       makeTable(encounterData, "#encountHead", "#encountBody");
     });
   }
 
+  var goToEncounterURL = function(selectedWhale) {
+    window.open("http://flukebook.org/encounters/encounter.jsp?number=" + selectedWhale);
+  }
+
+  var goToWhaleURL = function(selectedWhale) {
+    window.open("http://flukebook.org/individuals.jsp?number=" + selectedWhale);
+  }
 
 
 $(document).ready(function() {
   getData();
   getTableData();
 
+  var selectedWhale;
+
   setTimeout(function() {
     $("td:contains('Tissue Sample')").html("<img src='images/microscope.png'/>");
+    $('#encounterTable tr').click(function() {
+      selectedWhale = ($(this).attr("class"));
+      goToEncounterURL(selectedWhale);
+    });
+
+    $('#cooccurrenceTable tr').click(function() {
+      selectedWhale = ($(this).attr("class"));
+      goToWhaleURL(selectedWhale);
+    });
+    $("#encounterTable td:nth-child(1)").attr("class", "hide");
+    $("#encounterTable th:nth-child(1)").attr("class", "hide");
+
   }, 5000);
 
   $("#encounterTable").hide();
