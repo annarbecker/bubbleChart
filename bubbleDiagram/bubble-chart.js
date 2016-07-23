@@ -78,7 +78,6 @@
         var angle = Math.random() * pi2 ;
         var cx = self.centralPoint + dist * Math.cos(angle);
         var cy = self.centralPoint + dist * Math.sin(angle);
-
         var hit = false;
 
         $.each(circles, function (i, circle) {
@@ -142,7 +141,6 @@
       }
 
       function interpolateZoom (translate, scale) {
-
           var self = this;
           return d3.transition().duration(350).tween("zoom", function () {
               var iTranslate = d3.interpolate(zoom.translate(), translate),
@@ -157,52 +155,52 @@
       }
 
       function zoomClick() {
-          var clicked = d3.event.target,
-              direction = 0.5,
-              factor = 0.2,
-              target_zoom = 1,
-              center = [width / 2, height / 2],
-              extent = zoom.scaleExtent(),
-              translate = zoom.translate(),
-              translate0 = [],
-              l = [],
-              view = {x: translate[0], y: translate[1], k: zoom.scale()};
+        var clicked = d3.event.target,
+            direction = 0.5,
+            factor = 0.2,
+            target_zoom = 1,
+            center = [width / 2, height / 2],
+            extent = zoom.scaleExtent(),
+            translate = zoom.translate(),
+            translate0 = [],
+            l = [],
+            view = {x: translate[0], y: translate[1], k: zoom.scale()};
 
-          d3.event.preventDefault();
-          direction = (this.id === 'zoomIn') ? 1 : -1;
-          target_zoom = zoom.scale() * (1 + factor * direction);
+        d3.event.preventDefault();
+        direction = (this.id === 'zoomIn') ? 1 : -1;
+        target_zoom = zoom.scale() * (1 + factor * direction);
 
-          if (target_zoom < extent[0] || target_zoom > extent[1]) { return false; }
+        if (target_zoom < extent[0] || target_zoom > extent[1]) { return false; }
 
-          translate0 = [(center[0] - view.x) / view.k, (center[1] - view.y) / view.k];
-          view.k = target_zoom;
-          l = [translate0[0] * view.k + view.x, translate0[1] * view.k + view.y];
+        translate0 = [(center[0] - view.x) / view.k, (center[1] - view.y) / view.k];
+        view.k = target_zoom;
+        l = [translate0[0] * view.k + view.x, translate0[1] * view.k + view.y];
 
-          view.x += center[0] - l[0];
-          view.y += center[1] - l[1];
+        view.x += center[0] - l[0];
+        view.y += center[1] - l[1];
 
-          interpolateZoom([view.x, view.y], view.k);
+        interpolateZoom([view.x, view.y], view.k);
       }
 
         d3.select('#zoomIn').on('click', zoomClick);
         d3.select('#zoomOut').on('click', zoomClick);
-
-        var x = d3.scale.linear()
-            .domain([-width / 2, width / 2])
-            .range([0, width]);
-
-        var y = d3.scale.linear()
-            .domain([-height / 2, height / 2])
-            .range([height, 0]);
-
-        function reset() {
-          self.svg.call(zoom
-              .x(x.domain([-width / 2, width / 2]))
-              .y(y.domain([-height / 2, height / 2]))
-              .event);
-        }
-
-        d3.select('#reset').on('click', reset);
+        //
+        // var x = d3.scale.linear()
+        //     .domain([-width / 2, width / 2])
+        //     .range([0, width]);
+        //
+        // var y = d3.scale.linear()
+        //     .domain([-height / 2, height / 2])
+        //     .range([height, 0]);
+        //
+        // function reset() {
+        //   self.svg.call(zoom
+        //       .x(x.domain([-width / 2, width / 2]))
+        //       .y(y.domain([-height / 2, height / 2]))
+        //       .event);
+        // }
+        //
+        // d3.select('#reset').on('click', reset);
 
 
         self.circlePositions = self.randomCirclesPositions(options.intersectDelta);
@@ -210,10 +208,9 @@
         var node = self.svg.selectAll(".node")
           .data(self.circlePositions)
           .enter().append("g")
-          .attr("class", function (d) {return ["node", options.data.classed(d.item)].join(" w");});
+          .attr("class", function (d) {return ["node", options.data.classed(d.item)].join(" ");});
 
         var fnColor = d3.scale.category20();
-
 
         node.append("circle")
           .attr({r: function (d) {return d.r;}, cx: function (d) {return d.cx;}, cy: function (d) {return d.cy;}})
@@ -255,7 +252,7 @@
       self.transition.centralNode.attr('transform', toCentralPoint)
         .select("circle")
         .style("fill", "#0CED6E")
-        .attr('r', function (d) {return self.options.innerRadius;});
+        .attr('r', function (d) {return self.options.innerRadius;})
     },
 
     moveToReflection: function (node, swapped) {
@@ -286,16 +283,16 @@
     },
 
     registerClickEvent: function (node) {
-      var self = this;
-      var swapped = false;
-      node.style("cursor", "pointer").on("click", function (d) {
-        self.clickedNode = d3.select(this);
-        self.event.send("click", self.clickedNode);
-        self.reset(self.centralNode);
-        self.moveToCentral(self.clickedNode);
-        self.moveToReflection(self.svg.selectAll(".node:not(.active)"), swapped);
-        swapped = !swapped;
-      });
+        var self = this;
+        var swapped = false;
+        node.style("cursor", "pointer").on("click", function (d) {
+          self.clickedNode = d3.select(this);
+          self.event.send("click", self.clickedNode);
+          self.reset(self.centralNode);
+          self.moveToCentral(self.clickedNode);
+          self.moveToReflection(self.svg.selectAll(".node:not(.active)"), swapped);
+          swapped = !swapped;
+        });
     },
 
     getNodes: function () {
