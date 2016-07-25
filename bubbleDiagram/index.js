@@ -134,8 +134,6 @@ var makeTable = function(items, tableHeadLocation, tableBodyLocation) {
       }
       var parseA = parseInt(a);
       var whaleB = parseInt(b);
-      console.log(whaleA);
-      console.log(whaleB);
       if(parseA) {
         var whaleA = parseA;
         return whaleA > whaleB ? 1 : whaleA == whaleB ? 0 : -1;
@@ -265,7 +263,6 @@ var getData = function() {
         if(occurringWith === undefined) {
            occurringWith = "";
         }
-        console.log(occurringWith);
         encounter = {catalogNumber: catalogNumber, date: date, location: location, dataTypes: dataTypes, alternateID: alternateID, sex: sex, occurringWith: occurringWith, behavior: behavior};
         encounterData.push(encounter);
       }
@@ -282,9 +279,76 @@ var getData = function() {
   }
 
 
+  var getRelationshipData = function(relationshipId) {
+    //relationshipId == persistanceID
+    d3.json("http://www.flukebook.org/api/org.ecocean.social.Relationship/" + relationshipId, function(error, json) {
+      if(error) {
+        console.log("error")
+      }
+      jsonData = json;
+      console.log("Relationship data", jsonData);
+
+      var type = jsonData.type;
+      var indiviudal1 = jsonData.markedIndividualName1;
+      var indiviudal2 = jsonData.markedIndividualName2;
+      var role1 = jsonData.markedIndividualRole1;
+      var role2 = jsonData.markedIndividualRole2;
+      var socialUnit = jsonData.relatedSocialUnitName;
+      var startTime = jsonData.startTime;
+      var endTime = jsonData.endTime;
+
+      $("#setRelationship").show();
+      $("#type").val(type);
+      $('#role1').val(role1);
+      $("#indiviudal1").val(indiviudal1);
+      $("#indiviudal2").val(indiviudal2);
+      $("#indiviudal1").prop('disabled', false);
+      $("#indiviudal1").removeClass('hideInput');
+      $("#indiviudal2").prop('disabled', true);
+      $("#indiviudal2").addClass('hideInput');
+      $("#role2").val(role2);
+      $("#socialUnit").val(socialUnit);
+      $("#startTime").val(startTime);
+      $("#endTime").val(endTime);
+    });
+  }
+
+
 $(document).ready(function() {
-  getData();
-  getTableData();
+  $("#editRelationship").click(function() {
+    getRelationshipData(138);
+  });
+
+  $("#add").click(function() {
+    resetForm($('#setRelationship'), "5727");
+  });
+
+
+
+
+
+  function resetForm($form, indiviudal1) {
+    //indiviudal1 == markedIndividual
+    $form.show();
+    $form.find('input:text').val('');
+    $("#type option:selected").prop("selected", false);
+    $("#type option:first").prop("selected", "selected");
+    $("#role1 option:selected").prop("selected", false);
+    $("#role1 option:first").prop("selected", "selected");
+    $("#role2 option:selected").prop("selected", false);
+    $("#role2 option:first").prop("selected", "selected");
+
+    $("#indiviudal1").prop('disabled', true);
+    $("#indiviudal1").val(indiviudal1);
+    $("#indiviudal2").prop('disabled', false);
+    $("#indiviudal2").removeClass('hideInput');
+    $("#indiviudal1").addClass('hideInput');
+    $form.find('input:radio, input:checkbox')
+         .removeAttr('checked').removeAttr('selected');
+  }
+
+  // getData();
+  // getTableData();
 
   var selectedWhale;
 
